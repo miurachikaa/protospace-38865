@@ -1,8 +1,5 @@
 class PrototypesController < ApplicationController
   before_action :authenticate_user!, except: [:show, :index]
-  before_action :set_prototype, only: [:edit, :show]
-  before_action :move_to_index, only: [:edit]
-
 
   def index
     @prototypes = Prototype.all
@@ -22,12 +19,13 @@ class PrototypesController < ApplicationController
   end
 
   def show
+    @prototype = Prototype.find(params[:id])
     @comment = Comment.new
     @comments = @prototype.comments.includes(:user)
   end
 
   def edit
-    redirect_to root_path
+    @prototype = Prototype.find(params[:id])
   end
 
   def update
@@ -53,12 +51,6 @@ class PrototypesController < ApplicationController
 
   def set_prototype
     @prototype = Prototype.find(params[:id])
-  end
-
-  def move_to_index
-    unless user_signed_in?
-      redirect_to action: :index
-    end
   end
 
 end
